@@ -1,0 +1,20 @@
+web:
+  image: wordpress
+  links:
+    - mysql
+  environment:
+    - WORDPRESS_DB_PASSWORD=super_secret_password
+  ports:
+    - "8099:80"
+  volumes:
+    - ~/Documents/Testouilles/Wptests/plugins:/var/www/html/wp-content/plugins
+    - ~/Documents/Testouilles/Wptests/themes:/var/www/html/wp-content/themes
+  restart: unless-stopped
+mysql:
+  image: mysql:5.7
+  environment:
+    - MYSQL_ROOT_PASSWORD=super_secret_password
+    - MYSQL_DATABASE=wordpress
+  volumes:
+    - db_data:/var/lib/mysql
+  restart: unless-stopped
