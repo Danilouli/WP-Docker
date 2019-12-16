@@ -7,8 +7,8 @@ web:
   ports:
     - "8099:80"
   volumes:
-    - ~/Documents/Testouilles/Wptests/plugins:/var/www/html/wp-content/plugins
-    - ~/Documents/Testouilles/Wptests/themes:/var/www/html/wp-content/themes
+    - ~/Documents/Wptests/plugins:/var/www/html/wp-content/plugins
+    - ~/Documents/Wptests/themes:/var/www/html/wp-content/themes
   restart: unless-stopped
 mysql:
   image: mysql:5.7

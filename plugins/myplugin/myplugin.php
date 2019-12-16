@@ -20,7 +20,7 @@ function mp_getHTMLFromFile ($relPath) {
 
 
 function my_thank_you_text ( $content ) {
-	return $content .= '<p>Thank you for reading this shitty post ! :)</p>';
+	return $content .= '<p>Thank you for reading this shittty post ! :)</p>';
 }
 
 
@@ -29,7 +29,9 @@ function my_shortcode_text ( $content ) {
 }
 
 wp_register_script('mp-vuejs', "https://cdn.jsdelivr.net/npm/vue/dist/vue.js");
-wp_register_script('mp-script', plugin_dir_url(__FILE__ )."resources/js/myplugin.js", array('mp-vuejs'), false, true);
+wp_register_script('mp-vuejscalendar', "https://unpkg.com/vuejs-datepicker");
+wp_register_script('mp-vuecalendarfr', "https://unpkg.com/vuejs-datepicker/dist/locale/translations/fr.js");
+wp_register_script('mp-script', plugin_dir_url(__FILE__ )."resources/js/myplugin.js", array('mp-vuejs', 'mp-vuejscalendar', 'mp-vuecalendarfr'), false, true);
 add_action( 'the_content', 'my_thank_you_text' );
 add_shortcode('__SHORTCODE__', 'my_shortcode_text');
 wp_enqueue_script('mp-vuejs');
