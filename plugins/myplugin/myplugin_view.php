@@ -12,7 +12,7 @@
 </div>
 <style>
 	#mp-app {
-		height : 100vh;
+		height : 80vh;
 	}
 	.mp-datepickerwrapper {
 		width : 300px;
