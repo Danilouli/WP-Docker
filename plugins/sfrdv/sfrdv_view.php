@@ -1,24 +1,24 @@
-<div id="mp-app" v-bind:title="message">
+<div id="sfrdv-app" v-bind:title="message">
 	Htmlu Content <?php echo (1+1)?>
 	{{message}}
 	<vuejs-datepicker
 		:language="fr"
-		calendar-class="mp-datepicker"
-		input-class="mp-dateinput"
-		wrapper-class="mp-datepickerwrapper"
+		calendar-class="sfrdv-datepicker"
+		input-class="sfrdv-dateinput"
+		wrapper-class="sfrdv-datepickerwrapper"
 		@selected="onSelectDate"
 		:inline="isinline"
 	/>
 </div>
 <style>
-	#mp-app {
-		height : 80vh;
+	#sfrdv-app {
+		height : 100vh;
 	}
-	.mp-datepickerwrapper {
+	.sfrdv-datepickerwrapper {
 		width : 300px;
 		position : relative;
 	}
-	.mp-datepicker {
+	.sfrdv-datepicker {
 		position : relative;
 		width : 100%;
 	}

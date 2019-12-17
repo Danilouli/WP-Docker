@@ -1,11 +1,11 @@
 console.log("BONJOUR!");
-var data = {
+let data = {
 	message: 'Hello Vue!',
 	fr: vdp_translation_fr.js,
 	isinline: true
 };
-var app = new Vue({
-	el: '#mp-app',
+let app = new Vue({
+	el: '#sfrdv-app',
  	data,
 	components: {
 		vuejsDatepicker
