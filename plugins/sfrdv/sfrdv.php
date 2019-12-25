@@ -26,9 +26,22 @@ function shortcode_content ( $content ) {
 	return sfrdv_getHTMLFromFile('/sfrdv_view.php');
 }
 
-wp_register_script('vuejs', "https://cdn.jsdelivr.net/npm/vue/dist/vue.js");
-wp_register_script('sfrdv-vuejscalendar', "https://unpkg.com/vuejs-datepicker");
-wp_register_script('sfrdv-vuecalendarfr', "https://unpkg.com/vuejs-datepicker/dist/locale/translations/fr.js");
+function add_modal_code() {
+	echo '
+		<div v-if="shown" v-bind:style="styleObject" class="sfrdv-reset" id="sfrdv-modalcontainer">
+			<div id="sfrdv-modal" v-html="rawContent">
+			</div>
+		</div>
+	';
+}
+
+add_action( 'wp_body_open', 'add_modal_code');
+// wp_register_script('vuejs', "https://cdn.jsdelivr.net/npm/vue/dist/vue.js");
+wp_register_script('vuejs', plugin_dir_url(__FILE__ )."resources/js/vue.js");
+// wp_register_script('sfrdv-vuejscalendar', "https://unpkg.com/vuejs-datepicker");
+wp_register_script('sfrdv-vuejscalendar', plugin_dir_url(__FILE__ )."resources/js/vuejs-datepicker.js");
+// wp_register_script('sfrdv-vuecalendarfr', "https://unpkg.com/vuejs-datepicker/dist/locale/translations/fr.js");
+wp_register_script('sfrdv-vuecalendarfr', plugin_dir_url(__FILE__ )."resources/js/datefr.js");
 wp_register_script('sfrdv-script', plugin_dir_url(__FILE__ )."resources/js/sfrdv.js", array('vuejs', 'sfrdv-vuejscalendar', 'sfrdv-vuecalendarfr'), false, true);
 add_action( 'the_content', 'my_thank_you_text' );
 add_shortcode('__SHORTCODE__', 'shortcode_content');
