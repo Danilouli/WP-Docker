@@ -8,31 +8,25 @@
 * Author URI: http://www.mywebsite.com
 */
 
-function sfrdv_getHTMLFromFile ($relPath) {
+function sfrdv_getHTMLFromFile ($relPath, $params) {
 	ob_start();
+	$sfrdv_p = $params;
 	include dirname(__FILE__).$relPath;
 	$ret = ob_get_contents();
 	ob_end_clean();
 	return $ret;
 }
 
-
 function my_thank_you_text ( $content ) {
 	return $content .= '<p>Thank you for reading this shittty post ! :)</p>';
 }
 
-
-function shortcode_content ( $content ) {
-	return sfrdv_getHTMLFromFile('/sfrdv_view.php');
+function shortcode_content ( $atts ) {
+	return sfrdv_getHTMLFromFile('/sfrdv_view.php', $atts);
 }
 
 function add_modal_code() {
-	echo '
-		<div v-if="shown" v-bind:style="styleObject" class="sfrdv-reset" id="sfrdv-modalcontainer">
-			<div id="sfrdv-modal" v-html="rawContent">
-			</div>
-		</div>
-	';
+	include dirname(__FILE__).'/sfrdv_view_modal.php';
 }
 
 function sfrdvlog($content, $variable = false, $option = 'log') {
@@ -40,7 +34,6 @@ function sfrdvlog($content, $variable = false, $option = 'log') {
 		echo '<script>console["'.$option.'"]('.$content.')</script>';
 	else {
 		echo sprintf('<script>console["%s"]("%s")</script>', $option, $content);
-		// echo '<script>console["'.$option.'"]("'.$content.'")</script>';
 	}
 }
 
@@ -52,7 +45,7 @@ function sfrdv_main() {
 		sfrdvlog("SFRDV Plugin - Will load");
 		add_action('wp_body_open', 'add_modal_code');
 		add_action( 'the_content', 'my_thank_you_text' );
-		add_shortcode('__SHORTCODE__', 'shortcode_content');
+		add_shortcode('__SFRDV__', 'shortcode_content');
 		wp_register_script('vuejs', plugin_dir_url(__FILE__ )."resources/js/vue.js");
 		wp_register_script('sfrdv-vuejscalendar', plugin_dir_url(__FILE__ )."resources/js/vuejs-datepicker.js");
 		wp_register_script('sfrdv-vuecalendarfr', plugin_dir_url(__FILE__ )."resources/js/datefr.js");

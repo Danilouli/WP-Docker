@@ -1,81 +1,115 @@
-console.log("BONJOUR!");
-
-let appData = {
-	message: 'Hello Vue!',
-	fr: vdp_translation_fr.js,
-	isinline: true,
-	step : 0,
-	disponibilities : [
-		{
-			day : "19/12/2019",
-			minutes : [10*60, 14*60, 18*60]
-		},
-		{
-			day : "16/12/2019",
-			minutes : [8*60, 12*60, 20*60]
-		}
-	],
-	sDay : undefined,
-	sMinutes : undefined
+const docElt = document.body || document.documentElement;
+const getScrollTop = () => {
+	let docElt = document.documentElement;
+	let bodyElt = document.body;
+	return (docElt.scrollTop || bodyElt.scrollTop || window.scrollY || 0);
 };
 
-let app = new Vue({
-	el: '#sfrdv-app',
- 	data : appData,
-	components: {
-		vuejsDatepicker
-	},
-	computed: {
-		sDisponibility : () => {
-			console.log('afaf');
-			return (appData.disponibilities.find(d => d.day == appData.sDay) ||  {day : '', minutes : []});
-		},
-		sDate : () => {
-			if (!appData.sDay || !appData.sMinutes)
-				return;
-			let [day, month, year] = appData.sDay.split('/');
-			let minutes = appData.sMinutes % 60;
-			let hours = Math.floor((appData.sMinutes - minutes) / 60);
-			console.log({hours, minutes, k : appData.sMinutes});
-			let datus = new Date(year, month - 1, day, hours, minutes);
-			console.log('datus', datus);
-			return datus;
-		}
-	},
-	methods: {
-		onSelectDate : e => {
-			appData.message = "Choix de date...";
-			appData.isinline = true;
-			appData.step = 1;
-			appData.sDay = (new Date(e)).toLocaleDateString('FR-fr');
-		},
-		onSelectMinutes : e => {
-			console.log('onSelectMinutes e', e.target.innerText);
-			let minutes = parseInt(e.target.innerText);
-			appData.sMinutes = minutes;
-		}
-	}
-});
 
-let modalData = {
-	shown : false,
-	styleObject : {top : '0px', left : '0px'},
-	rawContent : /*html*/`<span>COCO</span>`
-};
-let modalContainer = new Vue({
-	el : '#sfrdv-modalcontainer',
-	data : modalData
-});
-
-let docElt = document.documentElement;
-window.addEventListener('sfrdv_showmodal', () => {
+window.addEventListener('sfrdv_showmodal', ({detail}) => {
+	const {minutes} = detail;
+	modalData.styleObject.top = `${getScrollTop()}px`;
+	modalData.contentus = minutes;
 	modalData.shown = true;
 	docElt.style.overflow = 'hidden';
-	let scrollTop = docElt.scrollTop;
-	modalData.styleObject.top = `${scrollTop}px`;
 });
-
 window.addEventListener('sfrdv_hidemodal', () => {
 	modalData.shown = false;
 	docElt.style.overflow = 'auto';
 });
+let modalData = {
+	shown : false,
+	styleObject : {top : '0px', left : '0px'},
+	contentus : 10
+};
+new Vue({
+	el : '#sfrdv-modalcontainer',
+	data : modalData,
+	methods : {
+		onBlabla : function() {
+			modalData.contentus = 'AAA';
+		},
+		closeModal : () => window.dispatchEvent(new CustomEvent('sfrdv_hidemodal'))
+	}
+});
+
+
+Vue.component('sfrdv-item', {
+	data : function() {
+		return (
+			{
+				message: 'Hello Vue!',
+				fr: vdp_translation_fr.js,
+				isinline: true,
+				step : 0,
+				disponibilities : [
+					{
+						day : "19/12/2019",
+						minutes : [10*60, 14*60, 18*60]
+					},
+					{
+						day : "16/12/2019",
+						minutes : [8*60, 12*60, 20*60]
+					}
+				],
+				sDay : undefined,
+				sMinutes : undefined
+			}
+		);
+	},
+	components: {
+		vuejsDatepicker
+	},
+	computed: {
+		sDisponibility : function() {
+			return (this.disponibilities.find(d => d.day == this.sDay) ||  {day : '', minutes : []});
+		},
+		sDate : function() {
+			if (!this.sDay || !this.sMinutes)
+				return;
+			let [day, month, year] = this.sDay.split('/');
+			let minutes = this.sMinutes % 60;
+			let hours = Math.floor((this.sMinutes - minutes) / 60);
+			let datus = new Date(year, month - 1, day, hours, minutes);
+			return datus;
+		}
+	},
+	methods: {
+		onSelectDate : function(e) {
+			this.message = "Choix de date...";
+			this.isinline = true;
+			this.step = 1;
+			this.sDay = (new Date(e)).toLocaleDateString('FR-fr');
+		},
+		onSelectMinutes : function(e) {
+			let minutes = parseInt(e.target.innerText);
+			this.sMinutes = minutes;
+			window.dispatchEvent(new CustomEvent('sfrdv_showmodal', {
+				detail : {
+					minutes
+				}
+			}));
+		}
+	},
+	template : /*html*/`
+		<div class="sfrdv-element" v-bind:title="message">
+			Htmlu Contente <?php echo (1+1)?> <?php echo $sfrdv_p["num"] ?> 
+			{{message}}
+			<vuejs-datepicker
+				:language="fr"
+				calendar-class="sfrdv-datepicker"
+				input-class="sfrdv-dateinput"
+				wrapper-class="sfrdv-datepickerwrapper"
+				@selected="onSelectDate"
+				:inline="isinline"
+			></vuejs-datepicker>
+			<div v-if="step == 1 && !!sDay">
+				CHOIX HEURE pourla date {{sDisponibility.day}}
+				<li v-for="hour in sDisponibility.minutes" @click="onSelectMinutes">
+					{{hour}}
+				</li>
+			</div>
+		</div>
+	`
+});
+new Vue({el: '#sfrdv-app'});
