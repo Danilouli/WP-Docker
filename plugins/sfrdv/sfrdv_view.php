@@ -1,5 +1,5 @@
 <div id="sfrdv-app">
-	<sfrdv-item></sfrdv-item>
+	<sfrdv-item agency="pere_lachaise"></sfrdv-item>
 </div>
 <style>
 	.sfrdv-reset {

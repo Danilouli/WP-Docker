@@ -7,9 +7,9 @@ const getScrollTop = () => {
 
 
 window.addEventListener('sfrdv_showmodal', ({detail}) => {
-	const {minutes} = detail;
+	const {minutes, agency} = detail;
 	modalData.styleObject.top = `${getScrollTop()}px`;
-	modalData.contentus = minutes;
+	modalData.contentus = `${minutes} - ${agency}`;
 	modalData.shown = true;
 	docElt.style.overflow = 'hidden';
 });
@@ -27,7 +27,7 @@ new Vue({
 	data : modalData,
 	methods : {
 		onBlabla : function() {
-			modalData.contentus = 'AAA';
+			modalData.contentus = `AAA`;
 		},
 		closeModal : () => window.dispatchEvent(new CustomEvent('sfrdv_hidemodal'))
 	}
@@ -57,6 +57,7 @@ Vue.component('sfrdv-item', {
 			}
 		);
 	},
+	props : ['agency'],
 	components: {
 		vuejsDatepicker
 	},
@@ -82,18 +83,20 @@ Vue.component('sfrdv-item', {
 			this.sDay = (new Date(e)).toLocaleDateString('FR-fr');
 		},
 		onSelectMinutes : function(e) {
-			let minutes = parseInt(e.target.innerText);
+			const minutes = parseInt(e.target.innerText);
 			this.sMinutes = minutes;
+			this.message = "MODALUS";
 			window.dispatchEvent(new CustomEvent('sfrdv_showmodal', {
 				detail : {
-					minutes
+					minutes,
+					agency : this.agency
 				}
 			}));
 		}
 	},
 	template : /*html*/`
 		<div class="sfrdv-element" v-bind:title="message">
-			Htmlu Contente <?php echo (1+1)?> <?php echo $sfrdv_p["num"] ?> 
+			Agence : {{agency}}
 			{{message}}
 			<vuejs-datepicker
 				:language="fr"
