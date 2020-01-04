@@ -23,6 +23,7 @@
 	}
 	.sfrdv-datepickerwrapper {
 		width : 300px;
+		max-width : 100%;
 		position : relative;
 	}
 	.sfrdv-datepicker {
