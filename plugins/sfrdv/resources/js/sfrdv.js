@@ -33,7 +33,6 @@ new Vue({
 	}
 });
 
-
 Vue.component('sfrdv-item', {
 	data : function() {
 		return (
@@ -53,7 +52,15 @@ Vue.component('sfrdv-item', {
 					}
 				],
 				sDay : undefined,
-				sMinutes : undefined
+				sMinutes : undefined,
+				disabledDates: {
+					to: new Date(2019, 11, 15),
+					// customPredictor: function(date) {
+					//   if(date.getDate() % 5 == 0){
+					// 	return true
+					//   }
+					// }
+				  }
 			}
 		);
 	},
@@ -105,11 +112,12 @@ Vue.component('sfrdv-item', {
 				wrapper-class="sfrdv-datepickerwrapper"
 				@selected="onSelectDate"
 				:inline="isinline"
+				:disabled-dates="disabledDates"
 			></vuejs-datepicker>
 			<div v-if="step == 1 && !!sDay">
-				CHOIX HEURE pourla date {{sDisponibility.day}}
+				CHOIX HEURE pour la date {{sDisponibility.day}}
 				<li v-for="hour in sDisponibility.minutes" @click="onSelectMinutes">
-					{{hour}}
+					{{hour}} minutes
 				</li>
 			</div>
 		</div>
